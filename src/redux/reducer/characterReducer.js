@@ -44,14 +44,13 @@ export default (state = initialState, { type, payload }) => {
             getCharDetailsPending: false,
             getCharDetailsSuccess: false,
             getCharDetailsError: false,
-            characterList: [...state.characterList, ...payload.results],
-            nextPageUrl: payload.next
+            charDetails: payload.results,
         }
         case GET_CHAR_DETAILS_ERROR: return {
             ...state,
-            getCharListPending: false,
-            getCharListSuccess: false,
-            getCharListError: true,
+            getCharDetailsPending: false,
+            getCharDetailsSuccess: false,
+            getCharDetailsError: true,
         }
         case RESET_CHARLIST: return initialState
     default: return state

@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import { View, Text, StyleSheet, Dimensions, FlatList, ActivityIndicator } from 'react-native';
 import { connect } from 'react-redux';
 import { getCharacterList } from '../../api';
-import { CharacterComponent } from 'component/Character';
+import { CharacterComponent } from 'component/molecules/Character';
 import { resetCharacterList } from '../../redux/actions';
 import { wp } from 'res/style/mixins';
 import { BasicTextField } from '../../component/atoms/basicTextField';
@@ -26,7 +26,6 @@ class HomeScreen extends Component {
     fetchMore() {
         const { nextPageUrl, fetchCharList } = this.props;
         if (nextPageUrl !== null) {
-            console.log("endReached")
             fetchCharList(nextPageUrl)
         }
     }
