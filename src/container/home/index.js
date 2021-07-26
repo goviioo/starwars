@@ -5,6 +5,9 @@ import { getCharacterList } from '../../api';
 import { CharacterComponent } from 'component/Character';
 import { resetCharacterList } from '../../redux/actions';
 import { wp } from 'res/style/mixins';
+import { BasicTextField } from '../../component/atoms/basicTextField';
+import { SearchHeader } from '../../component/molecules/Headers/searchableHeader';
+import { BasicLoader } from '../../component/atoms/loader';
 
 class HomeScreen extends Component {
     constructor(props) {
@@ -35,16 +38,21 @@ class HomeScreen extends Component {
             characterList,
             nextPageUrl } = this.props;
         const { height } = Dimensions.get('window');
-        console.log(characterList, getCharListSuccess, nextPageUrl, "character list")
+        console.log(getCharListPending, "character list")
         return (
             <View style={styles.containerStyle}>
+                {getCharListPending&&characterList.length==0&& <BasicLoader />}
+                <SearchHeader />
                 <FlatList
                     style={{ width: '100%', height }}
                     data={characterList}
                     keyExtractor={(item, index) => index}
-                    renderItem={(item) => {
+                    renderItem={({ item }) => {
+                        console.log(item, "haircolor")
                         return (
-                            <CharacterComponent />
+                            <CharacterComponent name={item?.name} hairColor={item?.hair_color}
+                                skinColor={item?.skin_color}
+                            />
                         )
                     }}
                     refreshing={false}
