@@ -8,14 +8,21 @@ import { wp } from 'res/style/mixins';
 import { BasicTextField } from '../../component/atoms/basicTextField';
 import { SearchHeader } from '../../component/molecules/Headers/searchableHeader';
 import { BasicLoader } from '../../component/atoms/loader';
+import apiConstants from '../../api/apiConstants.json'
+import { EmptyComponent } from '../../component/molecules/Placeholders/emptyComponent';
+import { ErrorComponent } from '../../component/molecules/Placeholders/errorComponent';
 
 class HomeScreen extends Component {
     constructor(props) {
-        super(props)
+        super(props);
+        this.state = {
+            searchText: null
+        }
     }
 
     componentDidMount() {
-        this.getInitialList();
+        const initialUrl =
+            this.getInitialList();
     }
 
     getInitialList() {
@@ -29,32 +36,41 @@ class HomeScreen extends Component {
             fetchCharList(nextPageUrl)
         }
     }
-
+    handleOnChange(text) {
+        this.setState({
+            searchText: text
+        });
+        const url = apiConstants.getCharacterList + text;
+        this.props.reset();
+        this.props.fetchCharList(url);
+    }
+    openDetails(item) {
+        this.props.navigation.push('Details', { url: item?.url })
+    }
     render() {
         const { getCharListPending,
-            getCharListSuccess,
             getCharListError,
-            characterList,
-            nextPageUrl } = this.props;
+            characterList, } = this.props;
+        const { searchText } = this.state;
         const { height } = Dimensions.get('window');
-        console.log(getCharListPending, "character list")
         return (
             <View style={styles.containerStyle}>
-                {getCharListPending&&characterList.length==0&& <BasicLoader />}
-                <SearchHeader />
+                {getCharListPending && characterList.length == 0 && searchText == null && <BasicLoader />}
+                <SearchHeader value={searchText} onChange={(text) => this.handleOnChange(text)} />
+                {characterList.length == 0 && !getCharListPending && <EmptyComponent />}
+                {getCharListError && <ErrorComponent />}
                 <FlatList
                     style={{ width: '100%', height }}
                     data={characterList}
                     keyExtractor={(item, index) => index}
                     renderItem={({ item }) => {
-                        console.log(item, "haircolor")
                         return (
-                            <CharacterComponent name={item?.name} hairColor={item?.hair_color}
+                            <CharacterComponent onPress={() => this.openDetails(item)} name={item?.name} hairColor={item?.hair_color}
                                 skinColor={item?.skin_color}
                             />
                         )
                     }}
-                    refreshing={false}
+                    refreshing={getCharListPending}
                     onRefresh={() => this.getInitialList()}
                     onEndReached={() => this.fetchMore()}
                     onEndReachedThreshold={0.01}
@@ -77,13 +93,11 @@ const styles = StyleSheet.create({
 
 const mapStateToProps = (state) => {
     const { getCharListPending,
-        getCharListSuccess,
         getCharListError,
         characterList,
         nextPageUrl } = state.characterReducer
     return {
         getCharListPending,
-        getCharListSuccess,
         getCharListError,
         characterList,
         nextPageUrl

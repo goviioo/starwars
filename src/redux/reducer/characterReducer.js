@@ -2,7 +2,6 @@ import { GET_CHAR_DETAILS_ERROR, GET_CHAR_DETAILS_PENDING, GET_CHAR_DETAILS_SUCC
 import config from '../../../config.json';
 const initialState = {
     getCharListPending: false,
-    getCharListSuccess: false,
     getCharListError: false,
     getCharDetailsPending: false,
     getCharDetailsSuccess: false,
@@ -16,13 +15,11 @@ export default (state = initialState, { type, payload }) => {
         case GET_CHAR_LIST_PENDING: return {
             ...state,
             getCharListPending: true,
-            getCharListSuccess: false,
             getCharListError: false,
         }
         case GET_CHAR_LIST_SUCCESS: return {
             ...state,
             getCharListPending: false,
-            getCharListSuccess: true,
             getCharListError: false,
             characterList: [...state.characterList, ...payload.results],
             nextPageUrl: payload.next
@@ -30,7 +27,6 @@ export default (state = initialState, { type, payload }) => {
         case GET_CHAR_LIST_ERROR: return {
             ...state,
             getCharListPending: false,
-            getCharListSuccess: false,
             getCharListError: true,
         }
         case GET_CHAR_DETAILS_PENDING: return {
@@ -44,7 +40,7 @@ export default (state = initialState, { type, payload }) => {
             getCharDetailsPending: false,
             getCharDetailsSuccess: false,
             getCharDetailsError: false,
-            charDetails: payload.results,
+            charDetails: payload,
         }
         case GET_CHAR_DETAILS_ERROR: return {
             ...state,

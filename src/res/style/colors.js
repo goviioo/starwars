@@ -2,7 +2,8 @@ export const colors = {
     grey: '#ccc',
     black:'#000',
     white:'#fff',
-    borderColor: '#ccc'
+    borderColor: '#ccc',
+    primary:'#245454'
 }
 
 export const hairColors = {
