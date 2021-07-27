@@ -1,13 +1,14 @@
 import React from 'react';
 import { ActivityIndicator, Modal, StyleSheet, Text, View } from 'react-native';
+import { colors } from '../../res/style/colors';
 import { fontSizes } from '../../res/style/fontStyle';
 
 export const BasicLoader = () => {
-    return(
+    return (
         <Modal>
-        <View style={{flex:1, justifyContent:'center', alignItems:'center'}}>
-        <ActivityIndicator color="red" size={40} />
-        </View>
+            <View style={styles.loaderCont}>
+                <ActivityIndicator color={colors.primary} size={40} />
+            </View>
         </Modal>
     )
 }
@@ -15,5 +16,10 @@ export const BasicLoader = () => {
 const styles = StyleSheet.create({
     textStyle: {
         fontSize: fontSizes.normal
+    },
+    loaderCont: {
+        flex: 1,
+        justifyContent: 'center',
+        alignItems: 'center'
     }
 })
